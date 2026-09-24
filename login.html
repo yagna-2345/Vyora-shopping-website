@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in or register to browse Vyora's luxury, minimalist clothing and lifestyle collections.">
+  <title>Sign In - VYORA</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <main class="login-page-container">
+    <!-- Left side: Brand Showcase Banner -->
+    <aside class="login-aside">
+      <div class="login-aside-overlay"></div>
+      <div class="login-aside-content">
+        <h1 class="login-aside-brand">VYORA</h1>
+        <p class="login-aside-tagline">Minimalist Luxury & Tailored Aesthetics</p>
+      </div>
+    </aside>
+
+    <!-- Right side: Authentication Form -->
+    <section class="login-form-side">
+      <div class="login-form-card">
+        <h2 id="formTitle">Sign In</h2>
+        <p class="login-subtitle" id="formSubtitle">Please enter your details to access the storefront.</p>
+        
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="username">Username or Email</label>
+            <input class="form-control" type="text" id="username" autocomplete="username" required placeholder="e.g. yagnasrinivas26@gmail.com">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" id="password" autocomplete="current-password" required placeholder="••••••••">
+          </div>
+          
+          <!-- CTA buttons must use high-contrast color var --cta-primary -->
+          <button class="btn btn-cta" style="width: 100%; margin-top: 1rem;" type="submit" id="btnSubmit">Sign In</button>
+        </form>
+
+        <p class="login-toggle-text" id="toggleAuthMode">
+          Don't have an account? <span class="login-toggle-link" id="authToggleLink">Sign Up</span>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/store.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

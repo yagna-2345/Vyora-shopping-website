@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Add new items, track quantities, and update stock limits for Vyora.">
+  <title>Admin Dashboard - VYORA</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header class="navbar">
+    <a href="index.html" class="nav-brand">VYORA</a>
+    
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Shop</a></li>
+        <li><a href="admin.html" class="nav-link active">Admin Dashboard</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <span class="nav-user"><strong>Admin Portal</strong></span>
+    </div>
+  </header>
+
+  <!-- Admin Main Container -->
+  <main class="admin-container">
+    
+    <div class="admin-header">
+      <h1>Inventory Control</h1>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">Manage stock limits and add new collection items in real-time.</p>
+    </div>
+
+    <!-- Inventory Stats Overview Cards -->
+    <section class="admin-stats">
+      <div class="stat-box">
+        <span class="stat-label">Total Listed Items</span>
+        <span class="stat-value" id="statTotalProducts">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Total Units in Stock</span>
+        <span class="stat-value" id="statTotalStock">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Low Stock Alerts</span>
+        <span class="stat-value" id="statLowStock" style="color: var(--cta-primary);">0</span>
+      </div>
+    </section>
+
+    <!-- Two-Column Layout: Add Product vs Inventory Table -->
+    <div class="admin-layout">
+      <!-- 1. Add Product Card -->
+      <section class="admin-card">
+        <h2>Add New Product</h2>
+        <form id="addProductForm">
+          <div class="form-group">
+            <label class="form-label" for="prodName">Product Name *</label>
+            <input class="form-control" type="text" id="prodName" required placeholder="e.g. Classic Linen Shirt">
+          </div>
+          
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+              <label class="form-label" for="prodGender">Target *</label>
+              <select class="form-control" id="prodGender" required>
+                <option value="men">Men</option>
+                <option value="women">Women</option>
+                <option value="unisex">Unisex</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" for="prodCategory">Category *</label>
+              <select class="form-control" id="prodCategory" required>
+                <option value="topwear">Top Wear</option>
+                <option value="bottomwear">Bottom Wear</option>
+                <option value="footwear">Foot Wear</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+              <label class="form-label" for="prodSubcategory">Subcategory *</label>
+              <select class="form-control" id="prodSubcategory" required>
+                <!-- Dynamically populated by JS -->
+              </select>
+            </div>
+            <div>
+              <label class="form-label" for="prodFitType" id="prodFitTypeLabel">Fit Type</label>
+              <select class="form-control" id="prodFitType">
+                <option value="none">None / Not Applicable</option>
+                <option value="oversized">Oversized</option>
+                <option value="slim">Slim Fit</option>
+                <option value="regular">Regular Fit</option>
+                <option value="boxy">Boxy Fit</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodPrice">Price ($) *</label>
+            <input class="form-control" type="number" id="prodPrice" step="0.01" min="0" required placeholder="145.00">
+          </div>
+
+          <!-- Dynamic size stock inputs based on category selection -->
+          <div class="form-group" id="apparelSizesGroup">
+            <label class="form-label">Apparel Stock per Size *</label>
+            <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.4rem;">
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">XS</label>
+                <input class="form-control apparel-size-input" type="number" data-size="XS" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">S</label>
+                <input class="form-control apparel-size-input" type="number" data-size="S" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">M</label>
+                <input class="form-control apparel-size-input" type="number" data-size="M" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">L</label>
+                <input class="form-control apparel-size-input" type="number" data-size="L" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">XL</label>
+                <input class="form-control apparel-size-input" type="number" data-size="XL" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">XXL</label>
+                <input class="form-control apparel-size-input" type="number" data-size="XXL" min="0" value="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" id="footwearSizesGroup" style="display: none;">
+            <label class="form-label">Footwear Stock per Size *</label>
+            <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 0.25rem;">
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">5</label>
+                <input class="form-control footwear-size-input" type="number" data-size="5" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">6</label>
+                <input class="form-control footwear-size-input" type="number" data-size="6" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">7</label>
+                <input class="form-control footwear-size-input" type="number" data-size="7" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">8</label>
+                <input class="form-control footwear-size-input" type="number" data-size="8" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">9</label>
+                <input class="form-control footwear-size-input" type="number" data-size="9" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">10</label>
+                <input class="form-control footwear-size-input" type="number" data-size="10" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">11</label>
+                <input class="form-control footwear-size-input" type="number" data-size="11" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">12</label>
+                <input class="form-control footwear-size-input" type="number" data-size="12" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">13</label>
+                <input class="form-control footwear-size-input" type="number" data-size="13" min="0" value="0">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.7rem; text-align: center;">14</label>
+                <input class="form-control footwear-size-input" type="number" data-size="14" min="0" value="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodImg">Upload Photos (Select Multiple) *</label>
+            <input class="form-control" type="file" id="prodImg" accept="image/*" multiple required style="padding: 0.5rem;">
+            <div id="imagePreviewsContainer" class="image-previews-container"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodDesc">Description</label>
+            <textarea class="form-control" id="prodDesc" placeholder="Crafted with pure linen fabric..."></textarea>
+          </div>
+
+          <!-- Buttons here do not use the high-contrast Add to Cart color to avoid confusion -->
+          <button class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem;" type="submit">List Product</button>
+        </form>
+      </section>
+
+      <!-- 2. Current Inventory Table -->
+      <section class="admin-card">
+        <h2>Current Inventory</h2>
+        <div class="table-responsive">
+          <table class="inventory-table">
+            <thead>
+              <tr>
+                <th>Product Details</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Quick Adjust Stock</th>
+                <th style="text-align: right;">Delete</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <!-- Dynamic entries generated by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
